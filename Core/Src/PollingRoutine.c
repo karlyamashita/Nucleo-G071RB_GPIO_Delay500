@@ -30,8 +30,8 @@
 #include "main.h"
 
 
-
 InputStatus_t inputs = {0};
+
 
 void PollingInit(void)
 {
@@ -47,16 +47,16 @@ void PollingRoutine(void)
 
 void GPIO_Check(InputStatus_t *input)
 {
-	if(input->Byte.data[1] != input->Byte.data[0])
+	if(input->Byte.data[1] != input->Byte.data[0]) // check for change, else do nothing.
 	{
-		input->Byte.data[1] = input->Byte.data[0];
+		input->Byte.data[1] = input->Byte.data[0]; // copy current state to last state
 
-		switch(input->Byte.data[0])
+		switch(input->Byte.data[0]) // index of truth table
 		{
 		case 0:
-			PB12_On();
+			PB12_Off();
 			PA10_On();
-			TimerCallbackTimerStart(&timerCallback, PA10_Off, 500, TIMER_NO_REPEAT);
+			TimerCallbackTimerStart(&timerCallback, PA10_Off, 500, TIMER_NO_REPEAT); // start timer to turn off PA10
 			break;
 		case 1: // all other case, PA12 is off
 		case 2:
@@ -66,7 +66,7 @@ void GPIO_Check(InputStatus_t *input)
 		case 6:
 		case 7:
 		default:
-			PB12_Off();
+			PB12_On();
 			break;
 		}
 	}
@@ -92,6 +92,10 @@ void PB12_Off(void)
 	HAL_GPIO_WritePin(PB12_GPIO_Port, PB12_Pin, GPIO_PIN_RESET);
 }
 
+/*
+ * Description: Update pin status for specific input.
+ * Input: pin data structure, pin to update, the pin state
+ */
 void GPIO_UpdatePinStatus(InputStatus_t *input, uint8_t pin, GPIO_PinState pinStatus)
 {
 	switch(pin)
