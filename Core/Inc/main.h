@@ -80,16 +80,23 @@ void Error_Handler(void);
 #define PA1_Pin GPIO_PIN_1
 #define PA1_GPIO_Port GPIOA
 #define PA1_EXTI_IRQn EXTI0_1_IRQn
-#define PA2_Pin GPIO_PIN_2
-#define PA2_GPIO_Port GPIOA
 #define PA10_Pin GPIO_PIN_5
 #define PA10_GPIO_Port GPIOA
+#define PB2_Pin GPIO_PIN_2
+#define PB2_GPIO_Port GPIOB
+#define PB2_EXTI_IRQn EXTI2_3_IRQn
 #define PB12_Pin GPIO_PIN_12
 #define PB12_GPIO_Port GPIOB
+#define PB15_Pin GPIO_PIN_15
+#define PB15_GPIO_Port GPIOB
+#define PB15_EXTI_IRQn EXTI4_15_IRQn
 #define TMS_Pin GPIO_PIN_13
 #define TMS_GPIO_Port GPIOA
 #define TCK_Pin GPIO_PIN_14
 #define TCK_GPIO_Port GPIOA
+#define PB6_Pin GPIO_PIN_6
+#define PB6_GPIO_Port GPIOB
+#define PB6_EXTI_IRQn EXTI4_15_IRQn
 
 /* USER CODE BEGIN Private defines */
 

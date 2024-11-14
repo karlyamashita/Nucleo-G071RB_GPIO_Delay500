@@ -31,7 +31,23 @@
 #define __weak __attribute__((weak))
 #endif
 
-
+#define NUCLEO_BOARD
+#ifdef NUCLEO_BOARD
+typedef union
+{
+	struct
+	{
+		uint8_t data[2]; // byte 0 is current state, byte 1 is last state
+	}Byte;
+	struct
+	{
+		uint8_t pb2:1;
+		uint8_t pb6:1;
+		uint8_t pb15:1;
+		uint8_t :5;
+	}Status;
+}InputStatus_t;
+#else
 typedef union
 {
 	struct
@@ -46,7 +62,7 @@ typedef union
 		uint8_t :5;
 	}Status;
 }InputStatus_t;
-
+#endif
 
 void PollingInit(void);
 void PollingRoutine(void);

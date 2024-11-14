@@ -35,6 +35,8 @@ InputStatus_t inputs = {0};
 
 void PollingInit(void)
 {
+	HAL_SYSCFG_StrobeDBattpinsConfig(SYSCFG_UCPD1_STROBE);
+
 	PB12_On(); // init to 1
 	PA10_Off(); // init to 0
 
@@ -101,6 +103,23 @@ void PB12_Off(void)
  */
 void GPIO_UpdatePinStatus(InputStatus_t *input, uint8_t pin, GPIO_PinState pinStatus)
 {
+#ifdef NUCLEO_BOARD
+	switch(pin)
+	{
+	case 0:
+		input->Status.pb2 = pinStatus;
+		break;
+	case 1:
+		input->Status.pb6 = pinStatus;
+		break;
+	case 2:
+		input->Status.pb15 = pinStatus;
+		break;
+	default:
+		// invalid pin
+		break;
+	}
+#else
 	switch(pin)
 	{
 	case 0:
@@ -116,6 +135,7 @@ void GPIO_UpdatePinStatus(InputStatus_t *input, uint8_t pin, GPIO_PinState pinSt
 		// invalid pin
 		break;
 	}
+#endif
 }
 
 /*
@@ -126,6 +146,20 @@ void GPIO_UpdatePinStatus(InputStatus_t *input, uint8_t pin, GPIO_PinState pinSt
  */
 void GPIO_Callback(uint16_t GPIO_Pin)
 {
+#ifdef NUCLEO_BOARD
+	if(GPIO_Pin == PB2_Pin)
+	{
+		GPIO_UpdatePinStatus(&inputs, 0, HAL_GPIO_ReadPin(PB2_GPIO_Port, PB2_Pin));
+	}
+	else if(GPIO_Pin == PB6_Pin)
+	{
+		GPIO_UpdatePinStatus(&inputs, 1, HAL_GPIO_ReadPin(PB6_GPIO_Port, PB6_Pin));
+	}
+	else if(GPIO_Pin == PB15_Pin)
+	{
+		GPIO_UpdatePinStatus(&inputs, 2, HAL_GPIO_ReadPin(PB15_GPIO_Port, PB15_Pin));
+	}
+#else
 	if(GPIO_Pin == PA1_Pin)
 	{
 		GPIO_UpdatePinStatus(&inputs, 0, HAL_GPIO_ReadPin(PA1_GPIO_Port, PA1_Pin));
@@ -138,6 +172,7 @@ void GPIO_Callback(uint16_t GPIO_Pin)
 	{
 		GPIO_UpdatePinStatus(&inputs, 2, HAL_GPIO_ReadPin(PC13_GPIO_Port, PC13_Pin));
 	}
+#endif
 }
 
 /*
