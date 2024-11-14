@@ -35,6 +35,9 @@ InputStatus_t inputs = {0};
 
 void PollingInit(void)
 {
+	PB12_On(); // init to 1
+	PA10_Off(); // init to 0
+
 	TimerCallbackRegisterOnly(&timerCallback, PA10_Off);
 }
 
@@ -54,11 +57,11 @@ void GPIO_Check(InputStatus_t *input)
 		switch(input->Byte.data[0]) // index of truth table
 		{
 		case 0:
-			PB12_Off();
-			PA10_On();
+			PB12_Off(); // pin is low
+			PA10_On(); // pin is high
 			TimerCallbackTimerStart(&timerCallback, PA10_Off, 500, TIMER_NO_REPEAT); // start timer to turn off PA10
 			break;
-		case 1: // all other case, PA12 is off
+		case 1: // all other case, PA12 is On (high state)
 		case 2:
 		case 3:
 		case 4:
@@ -66,7 +69,7 @@ void GPIO_Check(InputStatus_t *input)
 		case 6:
 		case 7:
 		default:
-			PB12_On();
+			PB12_On(); // pin is high
 			break;
 		}
 	}
